@@ -1,0 +1,11 @@
+<%
+  translator = Yandex::Translator.new(CONFIG[:yapi_key])
+  translation = translator.translate(params[:word], from: params[:from], to: params[:to])
+ %>
+ if ($('#edit_word, #new_word').find('#word_native').val().length == 0) {
+   $('#word_native').val('<%= translation %>');
+   $("#word_transcription").val('<%= Pinyin.t(translation, tonemarks:true) %>');   
+ } else {
+   $("#word_transcription").val('<%= Pinyin.t(params[:word], tonemarks:true) %>');
+   $("#word_translation").val('<%= translation %>');
+  }

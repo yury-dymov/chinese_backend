@@ -1,0 +1,54 @@
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    client_max_body_size 10m;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+    
+    upstream unicorn {
+      <% children.times do |n| %>
+		  server 127.0.0.1:<%= n + port %> fail_timeout=0;
+      <% end %>
+    }
+    
+
+   server {
+       listen         80;
+       server_name    <%= domain_name %> www.<%= domain_name %>;
+       
+        location ~ ^/(assets/|images/|system/|favicon\.ico$) {
+          expires max;
+          add_header Cache-Control public;
+          root <%= app_path %>/public;
+        }
+
+        location / {
+          proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header Host   $http_host;
+          proxy_redirect		off;
+          proxy_pass		http://unicorn;
+       }
+       
+   }
+}
+

@@ -1,0 +1,12 @@
+[Unit]
+Description=Postie Unicorn Server
+
+[Service]
+User=<%= app_user %>
+WorkingDirectory=<%= app_path %>
+Environment=RAILS_ENV=production
+PIDFile=<%= app_path %>/tmp/pids/unicorn.pid
+ExecStart=/usr/local/bin/bundle exec "unicorn -D -c <%= app_path %>/config/unicorn.rb -E production"
+
+[Install]
+WantedBy=multi-user.target

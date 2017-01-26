@@ -1,0 +1,2 @@
+class WordAll < Word
+end

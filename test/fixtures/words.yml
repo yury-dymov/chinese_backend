@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  topic_id: 
+  native: MyString
+  transcription: MyString
+  translation: MyString
+
+two:
+  topic_id: 
+  native: MyString
+  transcription: MyString
+  translation: MyString
